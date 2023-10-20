@@ -8,6 +8,7 @@
 from prompttools.experiment import LlamaCppExperiment
 from prompttools.experiment import OpenAIChatExperiment
 from prompttools.experiment import OpenAICompletionExperiment
+from prompttools.experiment import TogetherAICompletionExperiment
 from prompttools.experiment import AnthropicCompletionExperiment
 from prompttools.experiment import GooglePaLMCompletionExperiment
 from prompttools.experiment import HuggingFaceHubExperiment
@@ -17,6 +18,7 @@ ENVIRONMENT_VARIABLE = {
     "Replicate": "REPLICATE_API_TOKEN",
     "OpenAI Chat": "OPENAI_API_KEY",
     "OpenAI Completion": "OPENAI_API_KEY",
+    "TogetherAI Completion": "TOGETHER_API_KEY",
     "Anthropic": "ANTHROPIC_API_KEY",
     "Google PaLM": "GOOGLE_PALM_API_KEY",
     "HuggingFace Hub": "HUGGINGFACEHUB_API_TOKEN",
@@ -26,6 +28,7 @@ EXPERIMENTS = {
     "LlamaCpp Chat": LlamaCppExperiment,
     "OpenAI Chat": OpenAIChatExperiment,
     "OpenAI Completion": OpenAICompletionExperiment,
+    "TogetherAI Completion": TogetherAICompletionExperiment,
     "Anthropic": AnthropicCompletionExperiment,
     "Google PaLM": GooglePaLMCompletionExperiment,
     "HuggingFace Hub": HuggingFaceHubExperiment,
@@ -37,6 +40,7 @@ MODES = ("Instruction", "Prompt Template", "Model Comparison")
 MODEL_TYPES = (
     "OpenAI Chat",
     "OpenAI Completion",
+    "TogetherAI Completion",
     "Anthropic",
     "Google PaLM",
     "LlamaCpp Chat",
@@ -60,3 +64,4 @@ OPENAI_CHAT_MODELS = (
 )
 
 OPENAI_COMPLETION_MODELS = ("text-davinci-003", "text-davinci-002", "code-davinci-002")
+TOGETHERAI_COMPLETION_MODELS = TogetherAICompletionExperiment.list_models()

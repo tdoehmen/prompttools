@@ -8,6 +8,7 @@
 from .experiments.experiment import Experiment
 from .experiments.openai_chat_experiment import OpenAIChatExperiment
 from .experiments.openai_completion_experiment import OpenAICompletionExperiment
+from .experiments.togetherai_completion_experiment import TogetherAICompletionExperiment
 from .experiments.anthropic_completion_experiment import AnthropicCompletionExperiment
 from .experiments.huggingface_hub_experiment import HuggingFaceHubExperiment
 from .experiments.google_palm_experiment import GooglePaLMCompletionExperiment
@@ -35,6 +36,7 @@ __all__ = [
     "MindsDBExperiment",
     "OpenAIChatExperiment",
     "OpenAICompletionExperiment",
+    "TogetherAICompletionExperiment",
     "PineconeExperiment",
     "QdrantExperiment",
     "ReplicateExperiment",

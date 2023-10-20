@@ -54,6 +54,15 @@ def load_data(
             frequency_penalty=[frequency_penalty],
             presence_penalty=[presence_penalty],
         )
+    elif model_type in {"TogetherAI Completion"}:
+        experiment = EXPERIMENTS[model_type](
+            [model],
+            selectors,
+            temperature=[temperature],
+            top_p=[top_p],
+            max_tokens=[max_tokens],
+            repetition_penalty=[frequency_penalty],
+        )
     elif model_type == "HuggingFace Hub":
         experiment = EXPERIMENTS[model_type]([model], selectors, temperature=[temperature])
     elif model_type == "Anthropic":
@@ -76,6 +85,7 @@ def run_multiple(
     instructions,
     prompts,
     openai_api_key=None,
+    togetherai_api_key=None,
     anthropic_api_key=None,
     google_api_key=None,
     hf_api_key=None,
@@ -85,6 +95,8 @@ def run_multiple(
 
     if openai_api_key:
         os.environ["OPENAI_API_KEY"] = openai_api_key
+    if togetherai_api_key:
+        os.environ["TOGETHER_API_KEY"] = openai_api_key
     if anthropic_api_key:
         os.environ["ANTHROPIC_API_KEY"] = anthropic_api_key
     if google_api_key:

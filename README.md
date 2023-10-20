@@ -106,6 +106,7 @@ LLMs
 - Google Vertex AI - **Supported**
 - Azure OpenAI Service - **Supported**
 - Replicate - **Supported**
+- TogetherAI - **Supported**
 - Ollama - _In Progress_
 
 Vector Databases and Data Utility

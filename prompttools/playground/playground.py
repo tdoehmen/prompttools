@@ -22,7 +22,7 @@ try:
 except Exception:
     pass
 
-from prompttools.playground.constants import MODES, MODEL_TYPES, OPENAI_CHAT_MODELS, OPENAI_COMPLETION_MODELS
+from prompttools.playground.constants import MODES, MODEL_TYPES, OPENAI_CHAT_MODELS, OPENAI_COMPLETION_MODELS, TOGETHERAI_COMPLETION_MODELS
 from prompttools.playground.data_loader import render_prompts, load_data, run_multiple
 
 
@@ -62,6 +62,9 @@ with st.sidebar:
         elif model_type == "OpenAI Completion":
             model = st.selectbox("Model", OPENAI_COMPLETION_MODELS, key="model")
             api_key = st.text_input("OpenAI API Key", type="password")
+        elif model_type == "TogetherAI Completion":
+            model = st.selectbox("Model", TOGETHERAI_COMPLETION_MODELS, key="model")
+            api_key = st.text_input("TogetherAI API Key", type="password")
         elif model_type == "Replicate":
             model = st.text_input("Model", key="model")
             api_key = st.text_input("Replicate API Key", type="password")
@@ -96,24 +99,30 @@ with st.sidebar:
                     key=f"varname_{i}",
                 )
             )
-        temperature = st.slider("Temperature", min_value=0.01 if model_type == "Replicate" else 0.0, max_value=1.0, value=0.01 if model_type == "Replicate" else 0.0, step=0.01, key="temperature")
+        temperature = st.slider("Temperature", min_value=0.01 if model_type == "Replicate" else 0.0, max_value=1.0, value=0.01 if model_type == "Replicate" else (0.7 if model_type == "TogetherAI Completion" else 0.0) , step=0.01, key="temperature")
         top_p = None
         max_tokens = None
         presence_penalty = None
         frequency_penalty = None
         if model_type == "OpenAI Chat" or model_type == "OpenAI Completion":
             # top_p = st.slider("Top P", min_value=0.0, max_value=1.0, value=1.0, step=0.01, key="top_p")
-            # max_tokens = st.number_input("Max Tokens", min_value=0, value=, step=1, key="max_tokens")
+            max_tokens = st.number_input("Max Tokens", min_value=0, value=128, step=1, key="max_tokens")
             presence_penalty = st.slider(
                 "Presence Penalty", min_value=-2.0, max_value=2.0, value=0.0, step=0.01, key="presence_penalty"
             )
             frequency_penalty = st.slider(
                 "Frequency Penalty", min_value=-2.0, max_value=2.0, value=0.0, step=0.01, key="frequency_penalty"
             )
+        if model_type == "TogetherAI Completion":
+            max_tokens = st.number_input("Max Tokens", min_value=0, value=128, step=1, key="max_tokens")
+            frequency_penalty = st.slider(
+                "Frequency Penalty", min_value=-2.0, max_value=2.0, value=1.0, step=0.01, key="frequency_penalty"
+            )
     else:
         model_count = st.number_input("Add Model", step=1, min_value=1, max_value=5)
         prompt_count = st.number_input("Add Prompt", step=1, min_value=1, max_value=10)
         openai_api_key = st.text_input("OpenAI API Key", type="password")
+        togetherai_api_key = st.text_input("TogetherAI API Key", type="password")
         anthropic_api_key = st.text_input("Anthropic Key", type="password")
         google_api_key = st.text_input("Google PaLM Key", type="password")
         hf_api_key = st.text_input("HuggingFace Hub Key", type="password")
@@ -300,6 +309,7 @@ elif mode == "Model Comparison":
                     (
                         "OpenAI Chat",
                         "OpenAI Completion",
+                        "TogetherAI Completion",
                         "Anthropic",
                         "Google PaLM",
                         "LlamaCpp Chat",
@@ -348,6 +358,14 @@ elif mode == "Model Comparison":
                 instructions[j] = st.text_area(
                     "System Message", value="You are a helpful AI assistant.", key=f"instruction_{j}"
                 )
+            elif model_types[j - 1] == "TogetherAI Completion":
+                models.append(
+                    st.selectbox(
+                        "Model",
+                        TOGETHERAI_COMPLETION_MODELS,
+                        key=f"model_{j}",
+                    )
+                )
 
     prompts = []
     for i in range(prompt_count):
@@ -372,7 +390,7 @@ elif mode == "Model Comparison":
 
     if run:
         dfs = run_multiple(
-            model_types, models, instructions, prompts, openai_api_key, anthropic_api_key, google_api_key, hf_api_key, replicate_api_key
+            model_types, models, instructions, prompts, openai_api_key, togetherai_api_key, anthropic_api_key, google_api_key, hf_api_key, replicate_api_key
         )
         st.session_state.dfs = dfs
         for i in range(len(prompts)):

@@ -17,6 +17,11 @@ PROMPT:
 RESPONSE:
 """
 
+TOGETHER_TEMPLATE = """{instruction}
+
+{user_input}
+"""
+
 PALM_TEMPLATE = """{instruction}
 
 {user_input}
@@ -52,6 +57,9 @@ class PromptSelector:
 
     def for_openai_completion(self):
         return GENERIC_TEMPLATE.format(instruction=self.instruction, user_input=self.user_input)
+
+    def for_together_completion(self):
+        return TOGETHER_TEMPLATE.format(instruction=self.instruction, user_input=self.user_input)
 
     def for_huggingface_hub(self):
         return GENERIC_TEMPLATE.format(instruction=self.instruction, user_input=self.user_input)
